@@ -26,6 +26,9 @@ public class OrderService {
     @Autowired
     private CustomerRepository customerRepo;
 
+    @Autowired
+    private EmailService emailService;
+
     public Order placeOrder(Long customerId, String deliveryAddress, List<OrderItem> items) {
         if (items == null || items.isEmpty()) {
             throw new BadRequestException("Order must contain at least one item");
@@ -47,7 +50,16 @@ public class OrderService {
 
         items.forEach(i -> i.setOrder(order));
 
-        return orderRepo.save(order);
+        Order savedOrder = orderRepo.save(order);
+
+        emailService.sendOrderConfirmation(
+                customer.getEmail(),
+                customer.getName(),
+                savedOrder.getId(),
+                deliveryAddress
+        );
+
+        return savedOrder;
     }
 
     public List<Order> getOrders() {

@@ -38,4 +38,9 @@ public class CustomerController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Invalid email or password"));
     }
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Customer> getByEmail(@PathVariable String email) {
+        Customer customer = customerService.getByEmail(email);
+        return ResponseEntity.ok(customer);
+    }
 }

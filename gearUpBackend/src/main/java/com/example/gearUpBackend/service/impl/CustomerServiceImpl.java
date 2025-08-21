@@ -1,5 +1,6 @@
 package com.example.gearUpBackend.service.impl;
 
+import com.example.gearUpBackend.exception.ResourceNotFoundException;
 import com.example.gearUpBackend.model.Customer;
 import com.example.gearUpBackend.repository.CustomerRepository;
 import com.example.gearUpBackend.config.JwtUtil;
@@ -32,6 +33,10 @@ public class CustomerServiceImpl implements CustomerService {
     public Optional<Customer> authenticate(String email, String password) {
         return customerRepository.findByEmail(email)
                 .filter(c -> c.getPassword().equals(password));
+    }
+    public Customer getByEmail(String email) {
+        return customerRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with email: " + email));
     }
 
     @Override

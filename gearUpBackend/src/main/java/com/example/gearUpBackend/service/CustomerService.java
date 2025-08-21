@@ -8,4 +8,5 @@ public interface CustomerService {
     Optional<Customer> getCustomer(Long id);
     Optional<Customer> authenticate(String email, String password);
     String generateToken(Customer customer); // New method for token
+    Customer getByEmail(String email);
 }
